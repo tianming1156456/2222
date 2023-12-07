@@ -1,0 +1,28 @@
+name : weixin
+on:
+  workflow_dispatch:
+  schedule: 
+    # represents 23:00 international standard time, Beijing time requires +8 hours, and represents running at 7 am Beijing time
+    - cron: '0 23 * * *'0 23 * * *'
+jobs:
+#Group together all jobs running in the workflow
+  build:
+  #Define a job named build. The subkey will define the properties of the job
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v2
+    
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.1
+      - name: Set timezone
+        run: |
+          cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+      - name: install pip packages
+        run: |
+          python -m pip install --upgrade pip
+          pip3 install -r requirements.txt
+      - name : weixin
+        run: |
+          python3 main.py
